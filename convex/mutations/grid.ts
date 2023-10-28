@@ -98,3 +98,33 @@ export const disruptUser = mutation({
       }
   },
 });
+
+export const resolveDisruption = mutation({
+  args: {
+    game_id: v.id('games'),
+    username: v.string(),
+    new_disruption_count: v.number()
+  },
+  handler: async (ctx, args) => {
+    const game = await ctx.db
+      .query('games')
+      .filter((q) => q.eq(q.field('_id'), args.game_id))
+      // there should only be one, but fetch just one
+      .first();
+
+    if (game) {
+      const usernames = game.users.map((x) => {
+        return x.username;
+      });
+      const userIndex = usernames.indexOf(args.username);
+      // if the target user is in the game
+      if (userIndex != -1) {
+        game.users[userIndex].disruptions = args.new_disruption_count;
+        
+        ctx.db.patch(args.game_id, {
+          users: game.users
+        });
+      }
+    }
+  }
+});
