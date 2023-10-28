@@ -4,7 +4,12 @@ import { v } from 'convex/values';
 export default defineSchema({
   // table of current games
   games: defineTable({
-    users: v.array(v.string()),
+    users: v.array(v.object({
+      username: v.string(),
+      disruptions: v.number()
+    })),
+    winners: v.array(v.string()),
+    losers: v.array(v.string())
   }),
   // table of current grid states
   grids: defineTable({
