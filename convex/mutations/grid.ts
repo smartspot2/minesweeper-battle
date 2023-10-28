@@ -81,8 +81,9 @@ export const disruptUser = mutation({
         const diff = diff1.filter(function(x) {
           return game.losers.indexOf(x) < 0;
         });
-        
-        diff.splice(diff.indexOf(args.username));
+        if (diff.indexOf(args.username)>-1) {
+          diff.splice(diff.indexOf(args.username),1);
+        }
         const disruptedUser = diff[Math.floor(Math.random()*diff.length)];
         const found = game.users.find(function (element) {
           return element.username==disruptedUser;
