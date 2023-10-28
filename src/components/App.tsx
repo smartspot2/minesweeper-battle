@@ -4,7 +4,7 @@ import { Game } from './minesweeper/Game';
 export const App = () => {
   return (
     <>
-      <Game />
+      <Game user={'test'} />
     </>
   );
 };
