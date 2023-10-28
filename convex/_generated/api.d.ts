@@ -14,6 +14,7 @@ import type {
   FilterApi,
   FunctionReference,
 } from "convex/server";
+import type * as mutations_grid from "../mutations/grid";
 import type * as queries_grid from "../queries/grid";
 
 /**
@@ -25,6 +26,7 @@ import type * as queries_grid from "../queries/grid";
  * ```
  */
 declare const fullApi: ApiFromModules<{
+  "mutations/grid": typeof mutations_grid;
   "queries/grid": typeof queries_grid;
 }>;
 export declare const api: FilterApi<
