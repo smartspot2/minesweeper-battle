@@ -36,3 +36,23 @@ export const addWinner = mutation({
     }
   },
 });
+
+export const addLoser = mutation({
+  args: {
+    game_id: v.id('games'),
+    username: v.string()
+  },
+  handler: async (ctx, args) => {
+    const game = await ctx.db
+      .query('games')
+      .filter((q) => q.eq(q.field('_id'), args.game_id))
+      // there should only be one, but fetch just one
+      .first();
+    if (game!=null) {
+      game.losers.push(args.username);
+      ctx.db.patch(args.game_id, {
+        losers: game.losers
+      });
+    }
+  },
+});
