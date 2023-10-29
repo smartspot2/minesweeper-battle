@@ -22,14 +22,11 @@ export const Login = ({ setUsername: confirmUsername }: LoginProps) => {
 
   const [loginStage, setLoginStage] = useState<LoginStage>(LoginStage.USERNAME);
 
-  console.log(games);
-
   const joinGame = (game_id: Id<'games'>) => {
     joinGameMutation({ game_id, username });
   };
 
   const createGame = () => {
-    console.log('creating game');
     if (username) {
       createGameMutation({ username: username });
     } else {

@@ -13,7 +13,7 @@ import { useState } from 'react';
 
 const NUM_ROWS = 15;
 const NUM_COLS = 15;
-const NUM_MINES = 50;
+const NUM_MINES = 10;
 
 export const App = () => {
   const [username, setUsername] = useState<string>('');
@@ -22,8 +22,6 @@ export const App = () => {
   const initialValues = generateMines(NUM_ROWS, NUM_COLS, NUM_MINES);
   fillValues(initialValues);
   const initialCovers = [...Array(NUM_ROWS)].map(() => Array(NUM_COLS).fill(1));
-
-  console.log(userGame);
 
   const router = createBrowserRouter([
     {

@@ -1,4 +1,5 @@
 import { randint, shuffle } from "../../../util/random";
+import { fillValues } from "./values";
 
 const INITIAL_EXPANSION_PROB = 1;
 const DECAY_PROB = 0.6;
@@ -25,6 +26,11 @@ export const disruptBoard = (values: number[][], covers: number[][]) => {
       }
     }
   }
+  
+  if (possibleCenters.length === 0) {
+    return;
+  }
+
   const centerIdx = randint(0, possibleCenters.length);
   const [centerR, centerC] = possibleCenters[centerIdx];
 
@@ -63,7 +69,7 @@ export const disruptBoard = (values: number[][], covers: number[][]) => {
 
   // compute disrupted cells
   const disruptedCells = new Set<number>();
-  disruptedCells.add(encodeRC(numRows, centerR, centerC));
+  disruptedCells.add(encodeRC(numCols, centerR, centerC));
   expandDisruption(centerR, centerC, disruptedCells, 0);
 
   // convert set to array
@@ -76,12 +82,13 @@ export const disruptBoard = (values: number[][], covers: number[][]) => {
   shuffle(disruptedCellsArr);
 
   // execute disruption; first `numMines` elements are mines
-  for (const [idx, encoded] of disruptedCells.entries()) {
-    const [r, c] = decodeRC(numRows, encoded);
-    console.log({ r, c, numRows, numCols });
+  for (const [idx, encoded] of disruptedCellsArr.entries()) {
+    const [r, c] = decodeRC(numCols, encoded);
     values[r][c] = idx < numMines ? 9 : 0;
     covers[r][c] = 1;
   }
+
+  fillValues(values);
 };
 
 const encodeRC = (numCols: number, r: number, c: number) => {

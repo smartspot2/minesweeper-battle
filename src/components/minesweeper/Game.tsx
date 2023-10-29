@@ -26,6 +26,8 @@ export const Game = ({username, game, initialValues: initial_values, initialCove
   const [death, setDeath] = useState(false);
   const [win, setWin] = useState(false);
 
+  const [resolvingDisruption, setResolvingDisruption] = useState(false);
+
   const resolveDisruption = useMutation(api.mutations.game.resolveDisruption);
   const addLoser = useMutation(api.mutations.game.addLoser);
   const addWinner = useMutation(api.mutations.game.addWinner);
@@ -38,18 +40,20 @@ export const Game = ({username, game, initialValues: initial_values, initialCove
     }
   }
 
-  if (num_disruptions > 0) {
+  if (num_disruptions > 0 && !resolvingDisruption) {
     let new_values = values.map((row) => [...row]);
     let new_covers = covers.map((row) => [...row]);
     disruptBoard(new_values, new_covers);
 
     setValues(new_values);
     setCovers(new_covers);
+
+    setResolvingDisruption(true);
     resolveDisruption({
       game_id: game._id, 
       username: username, 
       new_disruption_count: num_disruptions - 1
-    });
+    }).then(() => setResolvingDisruption(false));
   }
 
   if (!win) {
