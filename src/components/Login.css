@@ -1,0 +1,40 @@
+.login-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    align-items: center;
+    justify-content: center;
+  
+    width: 100vw;
+    height: 100vh;
+}
+
+.join-game-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.join-game-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    border: 2px solid var(--fg-color);
+    
+    background-color: gray;
+}
+
+.join-game-item {
+    border: 2px solid var(--fg-color);
+}
+
+.create-game-button {
+    display: flex;
+    justify-content: center;
+
+    border: 2px solid var(--fg-color);
+
+    background-color: white;
+}
