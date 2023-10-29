@@ -1,6 +1,6 @@
 const CONFIG = {
   numRows: 15,
   numCols: 15,
-  numMines: 5,
+  numMines: 50,
 };
 export default CONFIG;
