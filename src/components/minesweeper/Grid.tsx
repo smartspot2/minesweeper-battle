@@ -2,31 +2,36 @@ import 'react';
 import { Cell } from './Cell';
 
 interface GridProps {
-  numbers: number[][];
+  values: number[][];
   covers: number[][];
-  onClick: (r: number, c: number, cover: number) => void;
+  onClick: (row: number, col: number) => void;
+  onFlag: (row: number, col: number) => void;
 }
 
 /**
- * Minesweeper grid component.
+ * Minesweeper grid component
  */
-export const Grid = ({ numbers, covers, onClick }: GridProps) => {
-  const handleClick = (r: number, c: number, cover: number) => {
-    onClick(r, c, cover);
+export const Grid = ({ values, covers, onClick, onFlag }: GridProps) => {
+  const handleLeftClick = (row: number, col: number) => {
+    onClick(row, col);
+  };
+
+  const handleRightClick = (row: number, col: number) => {
+    onFlag(row, col);
   };
 
   return (
     <div className="minesweeper-grid">
-      {numbers.map((row, row_idx) => (
-        <div className="minesweeper-grid-row" key={row_idx}>
-          {row.map((cell, cell_idx) => (
+      {values.map((row, row_index) => (
+        <div className="minesweeper-grid-row" key={row_index}>
+          {row.map((cell, col_index) =>
             <Cell
-              key={cell_idx}
               value={cell}
-              cover={covers[row_idx][cell_idx]}
-              onClick={(cover) => handleClick(row_idx, cell_idx, cover)}
+              cover={covers[row_index][col_index]}
+              onLeftClick={() => handleLeftClick(row_index, col_index)}
+              onRightClick={() => handleRightClick(row_index, col_index)}
             />
-          ))}
+          )}
         </div>
       ))}
     </div>
