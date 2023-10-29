@@ -35,3 +35,10 @@ export const getGameFromUsername = query({
     }
   },
 });
+
+export const listGames = query({
+  handler: async (ctx) => {
+    return ctx.db.query('games').collect();
+  },
+});
+

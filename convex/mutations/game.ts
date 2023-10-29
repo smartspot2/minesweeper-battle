@@ -1,5 +1,5 @@
 import { mutation } from '../_generated/server';
-import { v } from 'convex/values';
+import { ConvexError, v } from 'convex/values';
 
 /**
  * Create a new game in the database.
@@ -17,9 +17,35 @@ export const createGame = mutation({
     const game_id = await ctx.db.insert('games', new_game);
     await ctx.db.insert('users', {
       username: args.username,
-      game: game_id
+      game: game_id,
     });
     return new_game;
+  },
+});
+
+export const joinGame = mutation({
+  args: {
+    game_id: v.id('games'),
+    username: v.string(),
+  },
+  handler: async (ctx, args) => {
+    // add new user
+    await ctx.db.insert('users', {
+      username: args.username,
+      game: args.game_id,
+    });
+
+    // get the game object
+    const game = await ctx.db.get(args.game_id);
+    if (game == null) {
+      throw new ConvexError("attempting to join game that doesn't exist");
+    }
+
+    // add user to the game
+    await ctx.db.replace(args.game_id, {
+      ...game,
+      users: [...game.users, { username: args.username, disruptions: 0 }],
+    });
   },
 });
 
