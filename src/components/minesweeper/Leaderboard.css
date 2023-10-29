@@ -1,0 +1,51 @@
+.leaderboard-container {
+  display: flex;
+  flex-direction: column;
+
+  background-color: var(--bg-color);
+  opacity: 80%;
+  padding: 20px;
+
+  font-size: 120%;
+}
+
+.leaderboard-top-header {
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.leaderboard-winner-container {
+  border-bottom: 1px solid var(--fg-color);
+}
+
+.leaderboard-loser-container {
+  border-top: 1px solid var(--fg-color);
+}
+
+.leaderboard-item {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+
+  width: 100%;
+}
+
+.leaderboard-rank {
+  width: 45px;
+
+  text-align: right;
+}
+
+.leaderboard-user {
+  flex: 1;
+
+  text-align: left;
+}
+
+.leaderboard-user.winner {
+  color: green;
+}
+
+.leaderboard-user.loser {
+  color: red;
+}

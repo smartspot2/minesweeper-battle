@@ -9,6 +9,7 @@ import { disruptBoard } from './util/disrupt';
 import { Doc } from '../../../convex/_generated/dataModel';
 import { fillValues, generateMines } from './util/values';
 import CONFIG from '../../util/config';
+import { Leaderboard } from './Leaderboard';
 
 interface GameProps {
   username: string;
@@ -177,6 +178,7 @@ export const Game = ({
           <div className="result-text">
             <b>You win!</b>
           </div>
+          <Leaderboard game={game} />
           <button className="result-button" onClick={goBack}>
             Back
           </button>
@@ -187,6 +189,7 @@ export const Game = ({
           <div className="result-text">
             <b>You lose!</b>
           </div>
+          <Leaderboard game={game} />
           <button className="result-button" onClick={goBack}>
             Back
           </button>
