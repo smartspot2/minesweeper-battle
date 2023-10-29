@@ -119,6 +119,16 @@ export const Game = ({username, game, initialValues: initial_values, initialCove
         onClick={onClick}
         onFlag={onFlag}
       />
+      {game.winners.indexOf(username)>-1 ? 
+      <div className="win-screen">
+        <b>You win!</b>
+      </div>
+      : <p></p>}
+      {game.losers.indexOf(username)>-1 ? 
+      <div className="lose-screen">
+        <b>You lose!</b>
+      </div>
+      : <p></p>}
     </div>
   );
 };
