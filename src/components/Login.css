@@ -1,38 +1,69 @@
 .login-container {
-    display: flex;
-    flex-direction: column;
-    gap: 1em;
-    align-items: center;
-    justify-content: center;
-  
-    width: 100vw;
-    height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  align-items: center;
+  justify-content: center;
+
+  width: 100vw;
+  height: 100vh;
+}
+
+.username-input {
+  margin-left: 8px;
+  margin-right: 16px;
+}
+
+.username-submit {
+  padding: 4px 8px;
+  font-family: inherit;
 }
 
 .join-game-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .join-game-list {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+  display: grid;
+  grid-template-columns: 50px 2fr 1fr;
+  gap: 16px 8px;
+  padding: 16px;
 
-    border: 2px solid var(--fg-color);
-    
-    background-color: gray;
+  border: 1px solid var(--fg-color);
 }
 
 .join-game-item {
-    border: 2px solid var(--fg-color);
+  display: contents;
+}
+
+.join-game-button {
+  font-family: inherit;
+  font-size: inherit;
+
+  border: 2px solid var(--fg-color);
+  border-radius: 4px;
+  padding: 4px;
+}
+
+.join-game-id {
+  text-align: center;
+}
+
+.join-game-users {
+  text-align: center;
 }
 
 .create-game-button {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 
-    border: 2px solid var(--fg-color);
+  background-color: var(--fg-color);
+  color: var(--bg-color);
+
+  padding: 8px;
+
+  border-radius: 8px;
+  border: 2px solid var(--fg-color);
 }

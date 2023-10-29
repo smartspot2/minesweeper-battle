@@ -25,10 +25,14 @@ export const leaveExistingGames = async (
 
     // filter out the current user from the game
     const newUsers = game.users.filter((user) => user.username !== username);
-    await ctx.db.patch(gameId, {
-      ...game,
-      users: newUsers,
-    });
+    if (newUsers.length > 0) {
+      await ctx.db.patch(gameId, {
+        ...game,
+        users: newUsers,
+      });
+    } else {
+      await ctx.db.delete(gameId);
+    }
   }
 };
 

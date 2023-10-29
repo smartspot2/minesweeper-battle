@@ -52,6 +52,12 @@ export const Game = ({
   const addWinner = useMutation(api.mutations.game.addWinner);
   const disruptUser = useMutation(api.mutations.game.disruptUser);
   const updateGrid = useMutation(api.mutations.grid.mutateGrid);
+  const leaveGame = useMutation(api.mutations.game.leaveGame);
+
+  const goBack = () => {
+    // go back to the main page and delete the current user's associated objects
+    leaveGame({ username: username });
+  };
 
   let num_disruptions = 0;
   for (let i = 0; i < game.users.length; i++) {
@@ -166,19 +172,25 @@ export const Game = ({
   return (
     <div className="minesweeper-container">
       <Grid values={values} covers={covers} onClick={onClick} onFlag={onFlag} />
-      {game.winners.indexOf(username) > -1 ? (
-        <div className="win-screen">
-          <b>You win!</b>
+      {game.winners.indexOf(username) > -1 && (
+        <div className="result-modal win-screen">
+          <div className="result-text">
+            <b>You win!</b>
+          </div>
+          <button className="result-button" onClick={goBack}>
+            Back
+          </button>
         </div>
-      ) : (
-        <p></p>
       )}
-      {game.losers.indexOf(username) > -1 ? (
-        <div className="lose-screen">
-          <b>You lose!</b>
+      {game.losers.indexOf(username) > -1 && (
+        <div className="result-modal lose-screen">
+          <div className="result-text">
+            <b>You lose!</b>
+          </div>
+          <button className="result-button" onClick={goBack}>
+            Back
+          </button>
         </div>
-      ) : (
-        <p></p>
       )}
     </div>
   );

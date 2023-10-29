@@ -41,33 +41,63 @@ export const Login = ({ setUsername: confirmUsername }: LoginProps) => {
   if (loginStage === LoginStage.USERNAME) {
     return (
       <div className="login-container">
-        <input
-          className="username-input"
-          type="text"
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <button onClick={doConfirmUsername}>Submit</button>
+        <div>
+          <label>
+            Username:
+            <input
+              className="username-input"
+              type="text"
+              onChange={(e) => setUsername(e.target.value)}
+            />
+          </label>
+          <button className="username-submit" onClick={doConfirmUsername}>
+            Submit
+          </button>
+        </div>
       </div>
     );
   } else {
     return (
       <div className="login-container">
-        <div className="create-game-button" onClick={createGame}>
+        <button className="create-game-button" onClick={createGame}>
           Create Game
-        </div>
+        </button>
         <div className="join-game-container">
-          <div className="join-game-list">
-            {games != null &&
-              games.map((game) => (
-                <div
-                  key={game._id}
-                  className="join-game-button"
-                  onClick={() => joinGame(game._id)}
-                >
-                  {game._id}
+          {games != null && games.length > 0 ? (
+            <div className="join-game-list">
+              <div className="join-game-item">
+                <span></span>
+                <div className="join-game-id">
+                  <b>ID</b>
+                </div>
+                <div className="join-game-users">
+                  <b>Users</b>
+                </div>
+              </div>
+              {games.map((game) => (
+                <div className="join-game-item">
+                  <button
+                    className="join-game-button"
+                    onClick={() => joinGame(game._id)}
+                  >
+                    Join
+                  </button>
+                  <div key={game._id} className="join-game-id">
+                    {game._id}
+                  </div>
+                  <div className="join-game-users">
+                    {game.users.map((user) => user.username).join(', ')}
+                  </div>
                 </div>
               ))}
-          </div>
+            </div>
+          ) : (
+            <div className="join-game-item">
+              <span></span>
+              <span>No current games!</span>
+              <span></span>
+            </div>
+          )}
         </div>
       </div>
     );

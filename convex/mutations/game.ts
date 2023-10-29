@@ -1,6 +1,10 @@
 import { mutation } from '../_generated/server';
 import { ConvexError, v } from 'convex/values';
-import { deleteExistingGrids, deleteExistingUsers, leaveExistingGames } from '../util';
+import {
+  deleteExistingGrids,
+  deleteExistingUsers,
+  leaveExistingGames,
+} from '../util';
 
 /**
  * Create a new game in the database.
@@ -184,3 +188,15 @@ export const resolveDisruption = mutation({
     }
   },
 });
+
+export const leaveGame = mutation({
+  args: {
+    username: v.string(),
+  },
+  handler: async (ctx, args) => {
+    leaveExistingGames(ctx, args.username);
+    deleteExistingGrids(ctx, args.username);
+    deleteExistingUsers(ctx, args.username);
+  },
+});
+
