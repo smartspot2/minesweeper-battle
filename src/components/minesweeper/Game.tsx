@@ -43,6 +43,9 @@ export const Game = ({
   const [death, setDeath] = useState(false);
   const [win, setWin] = useState(false);
 
+  const [disruptDelta, setDisruptDelta] = useState(
+    initial_covers.map((row) => Array(row.length).fill(0)),
+  );
   const [resolvingDisruption, setResolvingDisruption] = useState(false);
 
   const [hasGenerated, setHasGenerated] = useState(grid?.state != null);
@@ -71,6 +74,24 @@ export const Game = ({
     const new_values = values.map((row) => [...row]);
     const new_covers = covers.map((row) => [...row]);
     disruptBoard(new_values, new_covers);
+
+    const foundDelta = findDisruptDelta(covers, new_covers);
+    const changeByDelta = (disrupt: number[][], delta: boolean[][], amount: number) => {
+      const newDisruptDelta = disrupt.map((row) => [...row]);
+      for (let i = 0; i < disruptDelta.length; i++) {
+        for (let j = 0; j < disruptDelta[i].length; j++) {
+          if (delta[i][j]) {
+            newDisruptDelta[i][j] += amount;
+            if (newDisruptDelta[i][j] < 0) {
+              newDisruptDelta[i][j] = 0;
+            }
+          }
+        }
+      }
+      setDisruptDelta(newDisruptDelta);
+    }
+    changeByDelta(disruptDelta, foundDelta, 10);
+    setTimeout(changeByDelta, 500, disruptDelta, foundDelta, -1);
 
     setValues(new_values);
     setCovers(new_covers);
@@ -172,7 +193,7 @@ export const Game = ({
 
   return (
     <div className="minesweeper-container">
-      <Grid values={values} covers={covers} onClick={onClick} onFlag={onFlag} />
+      <Grid values={values} covers={covers} disrupts={disruptDelta} onClick={onClick} onFlag={onFlag} />
       {game.winners.indexOf(username) > -1 && (
         <div className="result-modal win-screen">
           <div className="result-text">
@@ -243,3 +264,15 @@ const checkWin = (values: number[][], covers: number[][]): boolean => {
   }
   return checkedWin;
 };
+
+const findDisruptDelta = (covers: number[][], new_covers: number[][]): boolean[][] => {
+  const delta = covers.map((row) => Array(row.length).fill(false));
+  for (let i = 0; i < covers.length; i++) {
+    for (let j = 0; j < covers[i].length; j++) {
+      if (covers[i][j] !== new_covers[i][j]) {
+        delta[i][j] = true;
+      }
+    }
+  }
+  return delta;
+}

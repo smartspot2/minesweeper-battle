@@ -4,6 +4,7 @@ import { Cell } from './Cell';
 interface GridProps {
   values: number[][];
   covers: number[][];
+  disrupts: boolean[][];
   onClick: (row: number, col: number) => void;
   onFlag: (row: number, col: number) => void;
 }
@@ -11,7 +12,7 @@ interface GridProps {
 /**
  * Minesweeper grid component
  */
-export const Grid = ({ values, covers, onClick, onFlag }: GridProps) => {
+export const Grid = ({ values, covers, disrupts, onClick, onFlag }: GridProps) => {
   const handleLeftClick = (row: number, col: number) => {
     onClick(row, col);
   };
@@ -29,6 +30,7 @@ export const Grid = ({ values, covers, onClick, onFlag }: GridProps) => {
               key={col_index}
               value={cell}
               cover={covers[row_index][col_index]}
+              disrupt={disrupts[row_index][col_index]}
               onLeftClick={() => handleLeftClick(row_index, col_index)}
               onRightClick={() => handleRightClick(row_index, col_index)}
             />

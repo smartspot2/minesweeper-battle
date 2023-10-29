@@ -1,5 +1,5 @@
 import 'react';
-import React from 'react';
+import React, { useState } from 'react';
 
 const CELL_COLOR = [
   '#C0C0C0',
@@ -17,6 +17,7 @@ const CELL_COLOR = [
 interface CellProps {
   value: number;
   cover: number;
+  disrupt: boolean;
   onLeftClick: () => void;
   onRightClick: () => void;
 }
@@ -27,6 +28,7 @@ interface CellProps {
 export const Cell = ({
   value,
   cover,
+  disrupt,
   onLeftClick,
   onRightClick,
 }: CellProps) => {
@@ -60,16 +62,30 @@ export const Cell = ({
     cellClass += ' ' + 'minesweeper-cell-flag';
   }
 
+  let overlayClass = 'minesweeper-cell-overlay';
+  if (disrupt) {
+    overlayClass += ' ' + 'minesweeper-cell-overlay-disrupt';
+  } else {
+    overlayClass += ' ' + 'minesweeper-cell-overlay-nodisrupt';
+  }
+
   return (
-    <div
-      className={cellClass}
-      onClick={handleClick}
-      onContextMenu={handleClick}
-      style={{
-        color: CELL_COLOR[value],
-      }}
-    >
-      {cell_content}
+    <div className='minesweeper-cell-wrapper'>
+      <div
+        className={cellClass}
+        onClick={handleClick}
+        onContextMenu={handleClick}
+        style={{
+          color: CELL_COLOR[value],
+        }}
+      >
+        {cell_content}
+      </div>
+      <div 
+        className={overlayClass}
+        onClick={handleClick}
+        onContextMenu={handleClick}>
+      </div>
     </div>
   );
 };
