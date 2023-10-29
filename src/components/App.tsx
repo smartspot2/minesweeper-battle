@@ -47,7 +47,7 @@ export const App = () => {
           // grid not done loading yet, but game exists
           <div>Loading grid...</div>
         ) : (
-          <div>
+          <div className="game-wrapper">
             <Game
               game={userGame}
               grid={userGrid}

@@ -4,9 +4,6 @@
   justify-content: center;
 
   user-select: none;
-  cursor: pointer;
-
-  border: 1px solid var(--fg-color);
 
   width: 0.5em;
   height: 0.5em;
@@ -26,14 +23,31 @@
 
 .preview-game-container {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
 
-  width: 100vw;
-  height: 100vh;
+  gap: 16px;
+  flex: 0.5;
+}
+
+.preview-grid-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.preview-header {
+  text-align: center;
+  width: 100%;
+
+  background-color: #444;
 }
 
 .preview-grid {
+  grid-area: 1 / 1;
+
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -47,4 +61,20 @@
   flex-direction: row;
   align-items: center;
   justify-content: center;
+}
+
+.preview-overlay-container {
+  display: grid;
+}
+
+.preview-overlay {
+  grid-area: 1 / 1;
+}
+
+.preview-winner {
+  background-color: rgba(0, 255, 0, 0.6);
+}
+
+.preview-loser {
+  background-color: rgba(255, 0, 0, 0.6);
 }

@@ -47,7 +47,9 @@ export const Cell = ({
       cell_content = '💣';
       cellClass += ' ' + 'minesweeper-cell-bomb';
     } else {
-      cell_content = value;
+      if (value != 0) {
+        cell_content = value;
+      }
       cellClass += ' ' + 'minesweeper-cell-uncovered';
     }
   } else if (cover === 1) {
