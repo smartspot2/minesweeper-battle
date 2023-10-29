@@ -9,11 +9,17 @@ export const createGame = mutation({
     username: v.string(),
   },
   handler: async (ctx, args) => {
-    return await ctx.db.insert('games', {
+    const new_game = {
       users: [{ username: args.username, disruptions: 0 }],
       winners: [],
       losers: [],
+    };
+    const game_id = await ctx.db.insert('games', new_game);
+    await ctx.db.insert('users', {
+      username: args.username,
+      game: game_id
     });
+    return new_game;
   },
 });
 

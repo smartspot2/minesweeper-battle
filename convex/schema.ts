@@ -11,6 +11,10 @@ export default defineSchema({
     winners: v.array(v.string()),
     losers: v.array(v.string())
   }),
+  users: defineTable({
+    username: v.string(),
+    game: v.id("games")
+  }),
   // table of current grid states
   grids: defineTable({
     // game associated with the grid
