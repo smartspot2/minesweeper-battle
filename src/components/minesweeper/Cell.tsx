@@ -1,5 +1,5 @@
 import 'react';
-import React, { useState } from 'react';
+import React from 'react';
 
 const CELL_COLOR = [
   '#C0C0C0',
