@@ -8,14 +8,14 @@ import { useState } from 'react';
 
 
 interface GameProps {
-  initial_values: number[][];
-  initial_covers: number[][];
+  initialValues: number[][];
+  initialCovers: number[][];
 }
 
 /**
  * Main component for the minesweeper game.
  */
-export const Game = ({initial_values, initial_covers}: GameProps) => {
+export const Game = ({initialValues: initial_values, initialCovers: initial_covers}: GameProps) => {
   const [values, setValues] = useState(initial_values);
   const [covers, setCovers] = useState(initial_covers);
 

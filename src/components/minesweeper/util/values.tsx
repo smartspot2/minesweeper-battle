@@ -62,7 +62,8 @@ export const generateMines = (
   shuffle(possibilities);
 
   // first `numMines` values are mines
-  const board = Array(numRows).map(() => Array(numCols).fill(0));
+  const board = [...Array(numRows)].map(() => Array(numCols).fill(0));
+  console.log(board);
   for (let i = 0; i < numMines; i++) {
     const [r, c] = possibilities[i];
     board[r][c] = 9;

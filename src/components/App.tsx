@@ -1,26 +1,19 @@
 import 'react';
 import { Game } from './minesweeper/Game';
+import { fillValues, generateMines } from './minesweeper/util/values';
+
+const NUM_ROWS = 15;
+const NUM_COLS = 15;
+const NUM_MINES = 50;
 
 export const App = () => {
-  const initial_values = [
-    [1, 2, 2, 1, 0], 
-    [1, 9, 9, 1, 0],
-    [1, 2, 2, 2, 1], 
-    [0, 0, 0, 1, 9],
-];
-  const initial_covers = [
-    [1, 1, 1, 1, 1], 
-    [1, 1, 1, 1, 1], 
-    [1, 1, 1, 1, 1], 
-    [1, 1, 1, 1, 1],
-];
+  const initialValues = generateMines(NUM_ROWS, NUM_COLS, NUM_MINES);
+  fillValues(initialValues);
+  const initialCovers = [...Array(NUM_ROWS)].map(() => Array(NUM_COLS).fill(1));
 
   return (
     <>
-      <Game 
-        initial_values={initial_values} 
-        initial_covers={initial_covers} 
-      />
+      <Game initialValues={initialValues} initialCovers={initialCovers} />
     </>
   );
 };
