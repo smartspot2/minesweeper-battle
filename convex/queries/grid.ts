@@ -11,14 +11,3 @@ export const getGrid = query({
       .first();
   },
 });
-
-export const getGame = query({
-  args: { id: v.id("games") },
-  handler: async (ctx, args) => {
-    return await ctx.db
-      .query('games')
-      .filter((q) => q.eq(q.field('_id'), args.id))
-      // there should only be one, but fetch just one
-      .first();
-  },
-}); 

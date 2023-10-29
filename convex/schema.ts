@@ -13,6 +13,8 @@ export default defineSchema({
   }),
   // table of current grid states
   grids: defineTable({
+    // game associated with the grid
+    game: v.id("games"),
     // user associated with the grid
     user: v.string(),
     // grid state
