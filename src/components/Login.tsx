@@ -75,16 +75,14 @@ export const Login = ({ setUsername: confirmUsername }: LoginProps) => {
                 </div>
               </div>
               {games.map((game) => (
-                <div className="join-game-item">
+                <div className="join-game-item" key={game._id}>
                   <button
                     className="join-game-button"
                     onClick={() => joinGame(game._id)}
                   >
                     Join
                   </button>
-                  <div key={game._id} className="join-game-id">
-                    {game._id}
-                  </div>
+                  <div className="join-game-id">{game._id}</div>
                   <div className="join-game-users">
                     {game.users.map((user) => user.username).join(', ')}
                   </div>

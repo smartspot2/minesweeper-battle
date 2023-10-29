@@ -42,16 +42,19 @@ export const App = () => {
       element:
         userGame == null ? (
           <Navigate to="/" />
+        ) : userGrid == null ? (
+          // grid not done loading yet, but game exists
+          <div>Loading grid...</div>
         ) : (
           <Game
             game={userGame}
-            grid={userGrid!}
+            grid={userGrid}
             username={username}
             initialValues={
-              userGrid?.state != null ? userGrid.state.values : initialValues
+              userGrid.state == null ? initialValues : userGrid.state.values
             }
             initialCovers={
-              userGrid?.state != null ? userGrid.state.covers : initialCovers
+              userGrid.state == null ? initialCovers : userGrid.state.covers
             }
           />
         ),
