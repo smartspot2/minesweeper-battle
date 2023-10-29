@@ -13,6 +13,7 @@ interface CellProps {
  */
 export const Cell = ({ value, cover, onLeftClick, onRightClick }: CellProps) => {
   const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
     if (e.button === 0) {
       onLeftClick();
     } else if (e.button === 2) {
@@ -31,7 +32,7 @@ export const Cell = ({ value, cover, onLeftClick, onRightClick }: CellProps) => 
   }
 
   return (
-    <div className="minesweeper-cell" onClick={handleClick}>
+    <div className="minesweeper-cell" onClick={handleClick} onContextMenu={handleClick}>
       {cell_content}
     </div>
   );
