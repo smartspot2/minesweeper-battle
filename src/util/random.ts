@@ -2,7 +2,7 @@
  * In-place shuffle of an array.
  */
 export const shuffle = <T>(arr: Array<T>) => {
-  for (let i = arr.length; i > 0; i--) {
+  for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     // swap elements
     const tmp = arr[i];
