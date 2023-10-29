@@ -10,18 +10,22 @@ import {
 } from 'react-router-dom';
 import { Login } from './Login';
 import { useState } from 'react';
-
-const NUM_ROWS = 15;
-const NUM_COLS = 15;
-const NUM_MINES = 10;
+import CONFIG from '../util/config';
 
 export const App = () => {
   const [username, setUsername] = useState<string>('');
   const userGame = useQuery(api.queries.game.getGameFromUsername, { username });
+  const userGrid = useQuery(api.queries.grid.getGridFromUsername, { username });
 
-  const initialValues = generateMines(NUM_ROWS, NUM_COLS, NUM_MINES);
+  const initialValues = generateMines(
+    CONFIG.numRows,
+    CONFIG.numCols,
+    CONFIG.numMines,
+  );
   fillValues(initialValues);
-  const initialCovers = [...Array(NUM_ROWS)].map(() => Array(NUM_COLS).fill(1));
+  const initialCovers = [...Array(CONFIG.numRows)].map(() =>
+    Array(CONFIG.numCols).fill(1),
+  );
 
   const router = createBrowserRouter([
     {
@@ -40,10 +44,15 @@ export const App = () => {
           <Navigate to="/" />
         ) : (
           <Game
-            game={userGame!}
+            game={userGame}
+            grid={userGrid!}
             username={username}
-            initialValues={initialValues}
-            initialCovers={initialCovers}
+            initialValues={
+              userGrid?.state != null ? userGrid.state.values : initialValues
+            }
+            initialCovers={
+              userGrid?.state != null ? userGrid.state.covers : initialCovers
+            }
           />
         ),
     },

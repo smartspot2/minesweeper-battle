@@ -18,6 +18,7 @@ import type * as mutations_game from "../mutations/game";
 import type * as mutations_grid from "../mutations/grid";
 import type * as queries_game from "../queries/game";
 import type * as queries_grid from "../queries/grid";
+import type * as util from "../util";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -32,6 +33,7 @@ declare const fullApi: ApiFromModules<{
   "mutations/grid": typeof mutations_grid;
   "queries/game": typeof queries_game;
   "queries/grid": typeof queries_grid;
+  util: typeof util;
 }>;
 export declare const api: FilterApi<
   typeof fullApi,

@@ -1,13 +1,16 @@
 import { mutation } from '../_generated/server';
 import { v } from 'convex/values';
+import { deleteExistingGrids } from '../util';
 
 export const mutateGrid = mutation({
   args: {
     grid_id: v.id('grids'),
-    state: v.object({
-      numbers: v.array(v.array(v.number())),
-      covers: v.array(v.array(v.number())),
-    }),
+    state: v.optional(
+      v.object({
+        values: v.array(v.array(v.number())),
+        covers: v.array(v.array(v.number())),
+      }),
+    ),
   },
   handler: async (ctx, args) => {
     ctx.db.patch(args.grid_id, {
@@ -22,14 +25,11 @@ export const createGrid = mutation({
     username: v.string(),
   },
   handler: async (ctx, args) => {
+    deleteExistingGrids(ctx, args.username);
+
     ctx.db.insert('grids', {
       game: args.game_id,
-      user: args.username,
-      state: {
-        numbers: [],
-        covers: [],
-      },
+      username: args.username,
     });
   },
 });
-

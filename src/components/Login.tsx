@@ -3,7 +3,6 @@ import './Login.css';
 import { api } from '../../convex/_generated/api';
 import { useMutation, useQuery } from 'convex/react';
 import { Id } from '../../convex/_generated/dataModel';
-import { Navigate } from 'react-router-dom';
 
 enum LoginStage {
   USERNAME,
@@ -27,16 +26,16 @@ export const Login = ({ setUsername: confirmUsername }: LoginProps) => {
   };
 
   const createGame = () => {
-    if (username) {
-      createGameMutation({ username: username });
-    } else {
-      alert('Input username!');
-    }
+    createGameMutation({ username: username });
   };
 
   const doConfirmUsername = () => {
-    confirmUsername(username);
-    setLoginStage(LoginStage.JOIN_OR_CREATE)
+    if (username) {
+      confirmUsername(username);
+      setLoginStage(LoginStage.JOIN_OR_CREATE);
+    } else {
+      alert('Input username!');
+    }
   };
 
   if (loginStage === LoginStage.USERNAME) {

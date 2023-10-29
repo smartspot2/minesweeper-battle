@@ -50,10 +50,21 @@ export const generateMines = (
   numRows: number,
   numCols: number,
   numMines: number,
+  startRow: number = -2,
+  startCol: number = -2,
 ): number[][] => {
   const possibilities = [];
   for (let r = 0; r < numRows; r++) {
     for (let c = 0; c < numCols; c++) {
+      if (
+        r - 1 <= startRow &&
+        startRow <= r + 1 &&
+        c - 1 <= startCol &&
+        startCol <= c + 1
+      ) {
+        // not a possibility of too close to start
+        continue;
+      }
       possibilities.push([r, c]);
     }
   }

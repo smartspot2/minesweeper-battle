@@ -2,15 +2,22 @@ import 'react';
 
 import { Grid } from './Grid';
 import './Game.css';
-import { useMutation, useQuery } from 'convex/react';
+import { useMutation } from 'convex/react';
 import { api } from '../../../convex/_generated/api';
 import { useState } from 'react';
 import { disruptBoard } from './util/disrupt';
 import { Doc } from '../../../convex/_generated/dataModel';
+import { fillValues, generateMines } from './util/values';
+import CONFIG from '../../util/config';
 
 interface GameProps {
   username: string;
+  // current game state
   game: Doc<'games'>;
+  // current grid state (only used for id retrieval)
+  grid: Doc<'grids'>;
+
+  // initial values and covers for the game
   initialValues: number[][];
   initialCovers: number[][];
 }
@@ -18,20 +25,33 @@ interface GameProps {
 /**
  * Main component for the minesweeper game.
  */
-export const Game = ({username, game, initialValues: initial_values, initialCovers: initial_covers}: GameProps) => {
+export const Game = ({
+  username,
+  game,
+  grid,
+  initialValues: initial_values,
+  initialCovers: initial_covers,
+}: GameProps) => {
+  // board state
   const [values, setValues] = useState(initial_values);
   const [covers, setCovers] = useState(initial_covers);
-  const [mined, setMined] = useState(initial_covers.map((row) => Array(row.length).fill(false)));
+  const [mined, setMined] = useState(
+    initial_covers.map((row) => Array(row.length).fill(false)),
+  );
 
   const [death, setDeath] = useState(false);
   const [win, setWin] = useState(false);
 
   const [resolvingDisruption, setResolvingDisruption] = useState(false);
 
+  const [hasGenerated, setHasGenerated] = useState(grid?.state != null);
+
+  // mutations
   const resolveDisruption = useMutation(api.mutations.game.resolveDisruption);
   const addLoser = useMutation(api.mutations.game.addLoser);
   const addWinner = useMutation(api.mutations.game.addWinner);
   const disruptUser = useMutation(api.mutations.game.disruptUser);
+  const updateGrid = useMutation(api.mutations.grid.mutateGrid);
 
   let num_disruptions = 0;
   for (let i = 0; i < game.users.length; i++) {
@@ -41,8 +61,8 @@ export const Game = ({username, game, initialValues: initial_values, initialCove
   }
 
   if (num_disruptions > 0 && !resolvingDisruption) {
-    let new_values = values.map((row) => [...row]);
-    let new_covers = covers.map((row) => [...row]);
+    const new_values = values.map((row) => [...row]);
+    const new_covers = covers.map((row) => [...row]);
     disruptBoard(new_values, new_covers);
 
     setValues(new_values);
@@ -50,16 +70,16 @@ export const Game = ({username, game, initialValues: initial_values, initialCove
 
     setResolvingDisruption(true);
     resolveDisruption({
-      game_id: game._id, 
-      username: username, 
-      new_disruption_count: num_disruptions - 1
+      game_id: game._id,
+      username: username,
+      new_disruption_count: num_disruptions - 1,
     }).then(() => setResolvingDisruption(false));
   }
 
   if (!win) {
     const checkedWin = checkWin(values, covers);
     if (checkedWin) {
-      addWinner({game_id: game._id, username: username});
+      addWinner({ game_id: game._id, username: username });
       setWin(true);
     }
   }
@@ -69,18 +89,33 @@ export const Game = ({username, game, initialValues: initial_values, initialCove
       return;
     }
 
-    let new_covers = covers.map((row) => [...row]);
+    let cur_values = values;
+    if (!hasGenerated) {
+      // generate the board
+      cur_values = generateMines(
+        CONFIG.numRows,
+        CONFIG.numCols,
+        CONFIG.numMines,
+        row,
+        col,
+      );
+      fillValues(cur_values);
+      setHasGenerated(true);
+      setValues(cur_values);
+    }
+
+    const new_covers = covers.map((row) => [...row]);
 
     const cover = covers[row][col];
     if (cover === 0) {
       // TODO -- middle mouse click
       return;
     } else if (cover === 1) {
-      expand(values, new_covers, row, col);
-      if (values[row][col] === 9) {
+      expand(cur_values, new_covers, row, col);
+      if (cur_values[row][col] === 9) {
         // hit mine -- death
         setDeath(true);
-        addLoser({game_id: game._id, username: username});
+        addLoser({ game_id: game._id, username: username });
       }
     } else if (cover === 2) {
       // flag -- no change
@@ -88,6 +123,12 @@ export const Game = ({username, game, initialValues: initial_values, initialCove
     }
 
     setCovers(new_covers);
+
+    // update the server state as well
+    updateGrid({
+      grid_id: grid._id,
+      state: { values: cur_values, covers: new_covers },
+    });
   };
 
   const onFlag = (row: number, col: number) => {
@@ -96,49 +137,59 @@ export const Game = ({username, game, initialValues: initial_values, initialCove
     }
 
     const cover = covers[row][col];
-    let new_covers = covers.map((row) => [...row]);
+    const new_covers = covers.map((row) => [...row]);
     if (cover === 1) {
       new_covers[row][col] = 2;
-      
+
       // send disruption upon finding mine in new spot
       if (!mined[row][col] && values[row][col] == 9) {
-        let new_mined = mined.map((row) => [...row]);
+        const new_mined = mined.map((row) => [...row]);
         new_mined[row][col] = true;
 
-        disruptUser({game_id: game._id, username: username});
+        disruptUser({ game_id: game._id, username: username });
 
         setMined(new_mined);
       }
     } else if (cover === 2) {
       new_covers[row][col] = 1;
     }
+
     setCovers(new_covers);
+
+    // update the server state as well
+    updateGrid({
+      grid_id: grid._id,
+      state: { values: values, covers: new_covers },
+    });
   };
 
   return (
     <div className="minesweeper-container">
-      <Grid
-        values={values}
-        covers={covers}
-        onClick={onClick}
-        onFlag={onFlag}
-      />
-      {game.winners.indexOf(username)>-1 ? 
-      <div className="win-screen">
-        <b>You win!</b>
-      </div>
-      : <p></p>}
-      {game.losers.indexOf(username)>-1 ? 
-      <div className="lose-screen">
-        <b>You lose!</b>
-      </div>
-      : <p></p>}
+      <Grid values={values} covers={covers} onClick={onClick} onFlag={onFlag} />
+      {game.winners.indexOf(username) > -1 ? (
+        <div className="win-screen">
+          <b>You win!</b>
+        </div>
+      ) : (
+        <p></p>
+      )}
+      {game.losers.indexOf(username) > -1 ? (
+        <div className="lose-screen">
+          <b>You lose!</b>
+        </div>
+      ) : (
+        <p></p>
+      )}
     </div>
   );
 };
 
-
-const expand = (values: number[][], covers: number[][], row: number, col: number) : void => {
+const expand = (
+  values: number[][],
+  covers: number[][],
+  row: number,
+  col: number,
+): void => {
   const N = values.length;
   const M = values[0].length;
 
@@ -157,7 +208,7 @@ const expand = (values: number[][], covers: number[][], row: number, col: number
       expand(values, covers, row + 1, col);
       expand(values, covers, row, col + 1);
       expand(values, covers, row, col - 1);
-      
+
       expand(values, covers, row - 1, col - 1);
       expand(values, covers, row + 1, col - 1);
       expand(values, covers, row - 1, col + 1);
@@ -166,8 +217,7 @@ const expand = (values: number[][], covers: number[][], row: number, col: number
   }
 };
 
-
-const checkWin = (values: number[][], covers: number[][]) : boolean => {
+const checkWin = (values: number[][], covers: number[][]): boolean => {
   let checkedWin = true;
   for (let i = 0; i < values.length; i++) {
     for (let j = 0; j < values[i].length; j++) {
@@ -177,4 +227,4 @@ const checkWin = (values: number[][], covers: number[][]) : boolean => {
     }
   }
   return checkedWin;
-}
+};
