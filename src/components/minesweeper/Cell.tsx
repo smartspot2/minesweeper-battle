@@ -1,6 +1,13 @@
 import 'react';
 import React from 'react';
 
+const CELL_COLOR = [
+  '#C0C0C0', '#0100FE', '#017F01',
+  '#FE0000', '#010080', '#810102',
+  '#008081', '#000000', '#808080',
+  '#FE0000'
+];
+
 interface CellProps {
   value: number;
   cover: number;
@@ -22,17 +29,33 @@ export const Cell = ({ value, cover, onLeftClick, onRightClick }: CellProps) => 
   };
 
   let cell_content = null;
+  let cellClass = "minesweeper-cell";
 
   if (cover === 0) {
-    cell_content = value;
+    if (value === 9) {
+      cell_content = "💣";
+      cellClass += " " + "minesweeper-cell-bomb";
+    } else {
+      cell_content = value;
+      cellClass += " " + "minesweeper-cell-uncovered";
+    }
   } else if (cover === 1) {
     cell_content = null;
+    cellClass += " " + "minesweeper-cell-covered";
   } else {
-    cell_content = "F";
+    cell_content = "🚩";
+    cellClass += " " + "minesweeper-cell-flag";
   }
 
   return (
-    <div className="minesweeper-cell" onClick={handleClick} onContextMenu={handleClick}>
+    <div 
+      className={cellClass} 
+      onClick={handleClick} 
+      onContextMenu={handleClick}
+      style={{
+        color: CELL_COLOR[value]
+      }}
+    >
       {cell_content}
     </div>
   );

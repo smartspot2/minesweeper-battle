@@ -87,6 +87,11 @@ const expand = (values: number[][], covers: number[][], row: number, col: number
       expand(values, covers, row + 1, col);
       expand(values, covers, row, col + 1);
       expand(values, covers, row, col - 1);
+      
+      expand(values, covers, row - 1, col - 1);
+      expand(values, covers, row + 1, col - 1);
+      expand(values, covers, row - 1, col + 1);
+      expand(values, covers, row + 1, col + 1);
     }
   }
 };

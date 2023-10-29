@@ -28,8 +28,28 @@
   align-items: center;
   justify-content: center;
 
+  user-select: none;
+  cursor: pointer;
+  font-size: 1.5em;
+
   border: 1px solid var(--fg-color);
 
-  width: 3em;
-  height: 3em;
+  width: 2em;
+  height: 2em;
+}
+
+.minesweeper-cell-uncovered {
+  background-color: white;
+}
+
+.minesweeper-cell-covered {
+  background-color: lightslategray;
+}
+
+.minesweeper-cell-flag {
+  background-color: lightslategray;
+}
+
+.minesweeper-cell-bomb {
+  background-color: red;
 }
