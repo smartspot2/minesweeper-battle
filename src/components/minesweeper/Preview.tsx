@@ -3,7 +3,7 @@ import React from 'react';
 import { Doc } from '../../../convex/_generated/dataModel';
 import { useQuery } from 'convex/react';
 import { api } from '../../../convex/_generated/api';
-import './Preview.css'
+import './Preview.css';
 
 interface CellProps {
   cover: number;
@@ -43,7 +43,7 @@ const Grid = ({ covers }: GridProps) => {
       {covers.map((row, row_index) => (
         <div className="preview-grid-row" key={row_index}>
           {row.map((cell, col_index) => (
-            <Cell cover={cell} />
+            <Cell cover={cell} key={col_index} />
           ))}
         </div>
       ))}
@@ -56,10 +56,13 @@ const Grid = ({ covers }: GridProps) => {
  */
 export const Preview = ({ username, game }: GameProps) => {
   const gridElements: Array<React.ReactNode> = [];
-  const grids = useQuery(api.queries.grid.getOpponentGridsFromGame, {game_id: game._id, username: username})
+  const grids = useQuery(api.queries.grid.getOpponentGridsFromGame, {
+    game_id: game._id,
+    username: username,
+  });
 
   if (grids == null) return;
-  
+
   for (const grid of grids) {
     if (grid.state != null) {
       gridElements.push(<Grid covers={grid.state.covers} key={grid._id} />);

@@ -48,18 +48,18 @@ export const App = () => {
           <div>Loading grid...</div>
         ) : (
           <div>
-          <Game
-            game={userGame}
-            grid={userGrid}
-            username={username}
-            initialValues={
-              userGrid.state == null ? initialValues : userGrid.state.values
-            }
-            initialCovers={
-              userGrid.state == null ? initialCovers : userGrid.state.covers
-            }
-          />
-          <Preview username={username} game={userGame} />
+            <Game
+              game={userGame}
+              grid={userGrid}
+              username={username}
+              initialValues={
+                userGrid.state == null ? initialValues : userGrid.state.values
+              }
+              initialCovers={
+                userGrid.state == null ? initialCovers : userGrid.state.covers
+              }
+            />
+            <Preview username={username} game={userGame} />
           </div>
         ),
     },

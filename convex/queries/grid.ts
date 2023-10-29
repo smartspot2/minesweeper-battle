@@ -13,7 +13,7 @@ export const getGridFromUsername = query({
 });
 
 export const getOpponentGridsFromGame = query({
-  args: { game_id: v.id("games"), username: v.string() },
+  args: { game_id: v.id('games'), username: v.string() },
   handler: async (ctx, args) => {
     return await ctx.db
       .query('grids')
