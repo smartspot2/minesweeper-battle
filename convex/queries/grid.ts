@@ -11,3 +11,14 @@ export const getGridFromUsername = query({
       .first();
   },
 });
+
+export const getOpponentGridsFromGame = query({
+  args: { game_id: v.id("games"), username: v.string() },
+  handler: async (ctx, args) => {
+    return await ctx.db
+      .query('grids')
+      .filter((q) => q.eq(q.field('game'), args.game_id))
+      .filter((q) => q.neq(q.field('username'), args.username))
+      .collect();
+  },
+});

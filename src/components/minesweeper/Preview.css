@@ -1,0 +1,50 @@
+.preview-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  user-select: none;
+  cursor: pointer;
+
+  border: 1px solid var(--fg-color);
+
+  width: 0.5em;
+  height: 0.5em;
+}
+
+.preview-visible {
+  background-color: white;
+}
+
+.preview-hidden {
+  background-color: lightslategray;
+}
+
+.preview-flag {
+  background-color: red;
+}
+
+.preview-game-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100vw;
+  height: 100vh;
+}
+
+.preview-grid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  border: 2px solid var(--fg-color);
+}
+
+.preview-grid-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}

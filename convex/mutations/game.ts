@@ -199,4 +199,3 @@ export const leaveGame = mutation({
     deleteExistingUsers(ctx, args.username);
   },
 });
-

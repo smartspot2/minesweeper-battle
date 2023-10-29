@@ -38,4 +38,3 @@ export const Grid = ({ values, covers, onClick, onFlag }: GridProps) => {
     </div>
   );
 };
-

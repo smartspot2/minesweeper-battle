@@ -1,5 +1,6 @@
 import 'react';
 import { Game } from './minesweeper/Game';
+import { Preview } from './minesweeper/Preview';
 import { fillValues, generateMines } from './minesweeper/util/values';
 import { useQuery } from 'convex/react';
 import { api } from '../../convex/_generated/api';
@@ -46,6 +47,7 @@ export const App = () => {
           // grid not done loading yet, but game exists
           <div>Loading grid...</div>
         ) : (
+          <div>
           <Game
             game={userGame}
             grid={userGrid}
@@ -57,6 +59,8 @@ export const App = () => {
               userGrid.state == null ? initialCovers : userGrid.state.covers
             }
           />
+          <Preview username={username} game={userGame} />
+          </div>
         ),
     },
   ]);

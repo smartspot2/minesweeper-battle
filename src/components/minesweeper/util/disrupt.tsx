@@ -1,5 +1,5 @@
-import { randint, shuffle } from "../../../util/random";
-import { fillValues } from "./values";
+import { randint, shuffle } from '../../../util/random';
+import { fillValues } from './values';
 
 const INITIAL_EXPANSION_PROB = 1;
 const DECAY_PROB = 0.6;
@@ -26,7 +26,7 @@ export const disruptBoard = (values: number[][], covers: number[][]) => {
       }
     }
   }
-  
+
   if (possibleCenters.length === 0) {
     return;
   }

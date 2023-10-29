@@ -21,17 +21,15 @@ export const getGameFromUsername = query({
       return null;
     } else {
       const game_id = await ctx.db
-      .query('users')
-      .filter((q) => q.eq(q.field('username'), args.username))
-      // there should only be one, but fetch just one
-      .first();
-      if (game_id==null) {
+        .query('users')
+        .filter((q) => q.eq(q.field('username'), args.username))
+        // there should only be one, but fetch just one
+        .first();
+      if (game_id == null) {
         return null;
-      }
-      else {
+      } else {
         return await ctx.db.get(game_id.game);
       }
-      
     }
   },
 });
@@ -41,4 +39,3 @@ export const listGames = query({
     return ctx.db.query('games').collect();
   },
 });
-
